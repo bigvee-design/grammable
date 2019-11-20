@@ -10,7 +10,7 @@ RSpec.describe GramsController, type: :controller do
       delete :destroy, params: { id: gram.id }
       expect(response).to have_http_status(:forbidden)
     end
-   end  
+  end  
 
     it "shouldn't let unauthenticated users destroy a gram" do
       gram = FactoryBot.create(:gram)
@@ -40,8 +40,8 @@ RSpec.describe GramsController, type: :controller do
       sign_in user
       patch :update, params: { id: gram.id, gram: { message: 'wahoo' } }
       expect(response).to have_http_status(:forbidden)
-     end
     end
+  end
 
      it "shouldn't let unauthenticated users update a gram" do
       gram = FactoryBot.create(:gram)
@@ -137,7 +137,7 @@ RSpec.describe GramsController, type: :controller do
       get :new
       expect(response).to redirect_to new_user_session_path
     end
-   end 
+  end 
 
     it "should successfully show the new form" do
       user = FactoryBot.create(:user)
@@ -179,4 +179,4 @@ RSpec.describe GramsController, type: :controller do
       expect(gram_count).to eq Gram.count
     end
   end    
-end
+end 

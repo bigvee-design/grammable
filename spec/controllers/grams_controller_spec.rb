@@ -9,8 +9,7 @@ RSpec.describe GramsController, type: :controller do
       sign_in user
       delete :destroy, params: { id: gram.id }
       expect(response).to have_http_status(:forbidden)
-    end
-  end  
+    end 
 
     it "shouldn't let unauthenticated users destroy a gram" do
       gram = FactoryBot.create(:gram)
@@ -32,6 +31,7 @@ RSpec.describe GramsController, type: :controller do
       delete :destroy, params: { id: 'SPACEDUCK' }
       expect(response).to have_http_status(:not_found)
     end
+  end
 
   describe "grams#update action" do
     it "shouldn't let users who didn't create the gram update it" do
@@ -41,7 +41,6 @@ RSpec.describe GramsController, type: :controller do
       patch :update, params: { id: gram.id, gram: { message: 'wahoo' } }
       expect(response).to have_http_status(:forbidden)
     end
-  end
 
      it "shouldn't let unauthenticated users update a gram" do
       gram = FactoryBot.create(:gram)
@@ -75,7 +74,7 @@ RSpec.describe GramsController, type: :controller do
       gram.reload
       expect(gram.message).to eq "Initial Value"
     end
-  
+  end
 
   describe "grams#edit action" do
      it "shouldn't let a user who did not create the gram edit a gram" do
@@ -85,7 +84,6 @@ RSpec.describe GramsController, type: :controller do
        get :edit, params: { id: gram.id }
        expect(response).to have_http_status(:forbidden)
     end
-  end 
 
     it "shouldn't let unauthenticated users edit a gram" do
       gram = FactoryBot.create(:gram)
@@ -108,21 +106,20 @@ RSpec.describe GramsController, type: :controller do
       get :edit, params: { id: 'SWAG' }
       expect(response).to have_http_status(:not_found)
     end
+  end  
 
   describe "grams#show action" do
     it "should successfully show the page if the gram is found" do
       gram = FactoryBot.create(:gram)
      get :show, params: { id: gram.id }
      expect(response).to have_http_status(:success)
-    end
-  end 
-  
+    end 
 
     it "should return a 404 error if the gram is not found" do
       get :show, params: { id: 'TACOCAT' }
       expect(response).to have_http_status(:not_found)
     end
-
+  end
 
   describe "grams#index action" do
     it "should successfully show the page" do
@@ -137,7 +134,6 @@ RSpec.describe GramsController, type: :controller do
       get :new
       expect(response).to redirect_to new_user_session_path
     end
-  end 
 
     it "should successfully show the new form" do
       user = FactoryBot.create(:user)
@@ -146,16 +142,13 @@ RSpec.describe GramsController, type: :controller do
       get :new
       expect(response).to have_http_status(:success)
     end
-  
-
+  end  
 
   describe "grams#create action" do
-
     it "should require users to be logged in" do
       post :create, params: { gram: { message: "Hello" } }
       expect(response).to redirect_to new_user_session_path
     end
-  end
 
     it "should successfully create a new gram in our database" do
       user = FactoryBot.create(:user)

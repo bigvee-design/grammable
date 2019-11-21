@@ -41,7 +41,9 @@ class GramsController < ApplicationController
   def edit
     @gram = Gram.find_by_id(params[:id])
     return render_not_found if @gram.blank?
-    return render_not_found(:forbidden) if @gram.user != current_user
+    if @gram.user != current_user
+      render plain: 'Forbidden :(', status: :forbidden
+    end
   end
 
   def create
@@ -57,9 +59,7 @@ class GramsController < ApplicationController
 
   def gram_params
     params.require(:gram).permit(:message)
+    params.require(:gram).permit(:picture)
   end
 
-  def render_not_found
-    render plain: 'Not Found :(', status: :not_found
-  end
 end

@@ -2,6 +2,35 @@ require 'rails_helper'
 
 RSpec.describe GramsController, type: :controller do
 
+  describe "comments#create action" do
+    it "should allow users to create comments on grams" do
+      gram = FactoryBot.create(:gram)
+
+      user = FactoryBot.create(:user)
+      sign_in user
+
+      post :create, params: { gram_id: gram.id, comment: { message: 'awesome gram' } }
+
+      expect(response).to redirect_to root_path
+      expect(gram.comments.length).to eq 1
+      expect(gram.comments.first.message).to eq "awesome gram"
+    end
+
+    it "should require a user to be logged in to comment on a gram" do
+      gram = FactoryBot.create(:gram)
+      post :create, params: { gram_id: gram.id, comment: { message: 'awesome gram' } }
+      expect(response).to redirect_to new_user_session_path
+    end
+
+    it "should return http status code of not found if the gram isn't found" do
+      user = FactoryBot.create(:user)
+      sign_in user
+      post :create, params: { gram_id: 'YOLOSWAG', comment: { message: 'awesome gram' } }
+      expect(response).to have_http_status :not_found
+
+    end
+  end  
+
   describe "grams#destroy action" do
     it "shouldn't allow users who didn't create the gram to destroy it" do
       gram = FactoryBot.create(:gram)
@@ -28,7 +57,7 @@ RSpec.describe GramsController, type: :controller do
 
     it "should return a 404 message if we cannot find a gram with the id that is specified" do
       user = FactoryBot.create(:user)
-      sign_in gram.user
+      sign_in user
       delete :destroy, params: { id: 'SPACEDUCK' }
       expect(response).to have_http_status(:not_found)
     end
@@ -155,7 +184,13 @@ RSpec.describe GramsController, type: :controller do
       user = FactoryBot.create(:user)
       sign_in user
 
-      post :create, params: { gram: { message: 'Hello!' } }
+     post :create, params: {
+      gram: {
+        message: 'Hello!',
+       picture: fixture_file_upload("/picture.png", 'image/png')
+      }
+    }
+
       expect(response).to redirect_to root_path
 
       gram = Gram.last

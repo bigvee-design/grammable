@@ -1,7 +1,7 @@
 class GramsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
-   def destroy
+  def destroy
     @gram = Gram.find_by_id(params[:id])
     return render_not_found if @gram.blank?
     if @gram.user != current_user
@@ -58,8 +58,8 @@ class GramsController < ApplicationController
   private
 
   def gram_params
-    params.require(:gram).permit(:message)
-    params.require(:gram).permit(:picture)
+    params.require(:gram).permit(:message, :picture)
+    #params.require(:gram).permit(:picture)
   end
 
 end

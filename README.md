@@ -6,4 +6,6 @@ I built this Automated Software Test app to ensure good test coverage and releas
 
 Solution and Tests to the University of Texas at Austin Image #2 problem.
 
+![](./image/screenshot.png)
+
 https://grammable-vincent-job.herokuapp.com/
